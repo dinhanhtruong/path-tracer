@@ -2,7 +2,7 @@
 
 This is my implementation of a physically-based renderer using path tracing, which has core functionalities such as global illumination, event splitting, Russian roulette termination, soft shadows, tone mapping, and four BRDFs (diffuse, specular, glossy, refractive). It additionally supports importance sampling, stratified sampling, and depth-of-field effects.
 
-See the outputs/submission folder for examples of rendered images.
+See [outputs/](./outputs) for examples of rendered images.
 
 ## Features
 The core path tracing algorithm can be found in pathtracer.cpp. The following features are supported by the path tracer:
@@ -21,7 +21,12 @@ The core path tracing algorithm can be found in pathtracer.cpp. The following fe
 
 
 ## Running the code
+First clone the repo via SSH. In the root directory, run
+
+```
+git submodule update --init --recursive
+```
 
 Before running the code, first edit the rendering options at the top of util/CS123Common.h. See the inline comments for a description of each. The additional features can be enabled in any combination. 
 
-Build the program using Qt and set the working directory to be the root of this repo. Run the program by providing two space-separated command line arguments: a relative path to the input XML scenegraph and a relative path to the desired output file. For example, the arguments could be "example-scenes/CornellBox-Glossy.xml outputs/CornellBox-Glossy.png"
+Build the program using Qt and set the working directory to be the root of this repo. Run the program by providing two space-separated command line arguments: a relative path to the input XML scenegraph and a relative path to the desired output file. For example, the arguments could be ```example-scenes/CornellBox-Glossy.xml outputs/CornellBox-Glossy.png```
