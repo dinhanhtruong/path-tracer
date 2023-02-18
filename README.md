@@ -2,6 +2,8 @@
 
 This is my implementation of a physically-based renderer using path tracing, which has core functionalities such as global illumination, event splitting, Russian roulette termination, soft shadows, tone mapping, and four BRDFs (diffuse, specular, glossy, refractive). It additionally supports importance sampling, stratified sampling, and depth-of-field effects.
 
+![sphere](./outputs/high_res/CornellBox-Sphere_cropped.png)
+
 See [outputs/](./outputs) for examples of rendered images.
 
 ## Features
@@ -14,10 +16,16 @@ The core path tracing algorithm can be found in pathtracer.cpp. The following fe
 * **Tone mapping + gamma correction**: I used the extended Reinhard tonemap operator to map the renderer's high dynamic range radiance values to a 0-255 RGB color space. The tonemap operator acts on luminance values calculated by weighting the RGB channels of the radiance. Additionally, I used basic gamma correction to help make darker regions of the renderings more visible. 
 * **BRDFs**: The path tracer can render diffuse, mirror, glossy/phong, and refractive surfaces. Refractive surfaces like glass cast transmitted rays into the object according to Snell's law. Additionally, Fresnel reflection is estimated using Schlick's approximation; the radiance contribution from reflected/transmitted rays is weighted accordingly such that the reflectance is greatest at grazing angles.
 * **BRDF importance sampling**: To reduce the variance caused by naive uniform hemisphere sampling, I also implemented BRDF-based importance sampling for diffuse and glossy BRDFs, which can be optionally enabled in util/CS123Common.h. Rather than sampling uniformly, rays are sampled according to a probability distribution roughly proportional to the BRDF at the intersection. For diffuse surfaces, the PDF is proportional to the cosine of the angle between the surface normal and sampled ray. For glossy surfaces, it is proportional to the cosine^n term of the Phong BRDF, which spikes near the mirror-reflected direction. I derived the random ray samplers for these distributions by applying the inversion method (by first computing the PDF w.r.t. the ray direction, then the CDF, then the inverse of the CDF). 
-    * The effect of importance sampling is most pronounced for glossy surfaces. See outputs/submission/extra_credit/BRDF_importance_sampling.
+
+   <img src="./outputs/cornellBox-Glossy_cropped.png" width="48%">
+   <img src="./outputs/high_res/CornellBox-Glossy_croppedpng.png" width="47%">
+   
 * **Stratified sampling**: To further reduce the total radiance, I implemented stratified subpixel sampling which can be optionally enabled. Rather than randomly sampling rays from the camera through random locations within each pixel, pixels are subdivided into smaller cells, and one sample is picked within each cell. Doing so decreases the discrepancy by making it impossible for samples to cluster in the same (few) regions; the samples become more regularly spaced but still remain random.
     * The effect of stratified sampling is quite difficult to discern visually; e.g. there is very slight noise reduction in the soft shadows.
 * **Depth of field**: I simulated depth of field by randomly scattering the origin of camera rays across a smallcircular lens instead of always casting rays from a fixed camera point. This produces an effect that mimics camera defocus blur. The location of the focus plane can be increased as an option, which will result in farther objects in the scene being in focus.
+
+   <img src="./outputs/depth_of_field/CornellBox_depth3_aperature0.35.png" width="48%">
+   <img src="./outputs/depth_of_field/CornellBox_depth4_aperature0.35.png" width="48%">
 
 
 ## Running the code
